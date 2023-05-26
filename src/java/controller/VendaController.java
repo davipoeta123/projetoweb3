@@ -19,7 +19,7 @@ public class VendaController extends HttpServlet {
     private String email;
     private String telefone;
     private String genero;
-    private String data_nascimento;
+    private String nascimento;
     private String cidade;
     private String estado;
     private String endereco;
@@ -38,28 +38,29 @@ public class VendaController extends HttpServlet {
         this.email = request.getParameter("email");
         this.telefone = request.getParameter("telefone");
         this.genero = request.getParameter("genero");
-        this.data_nascimento = request.getParameter("data_nascimento");
+        this.nascimento = request.getParameter("nascimento");
         this.cidade = request.getParameter("cidade");
         this.estado = request.getParameter("estado");
         this.endereco = request.getParameter("endereco");
         
 
         try {
+            VendaDAO exDao = new VendaDAO();
+            
             if (request.getParameter("cod") == null) {
                 Venda venda = new Venda(
                         this.nome,
                         this.email,
                         this.telefone,
                         this.genero,
-                        this.data_nascimento,
+                        this.nascimento,
                         this.cidade,
                         this.estado,
                         this.endereco
                 );
 
-                VendaDAO exDao = new VendaDAO();
                 exDao.insertVenda(venda);
-                response.sendRedirect("lista.jsp");
+                
             } else {
                 Venda venda = new Venda(
                         this.cod,
@@ -67,16 +68,18 @@ public class VendaController extends HttpServlet {
                         this.email,
                         this.telefone,
                         this.genero,
-                        this.data_nascimento,
+                        this.nascimento,
                         this.cidade,
                         this.estado,
                         this.endereco
                 );
 
-                VendaDAO exDao = new VendaDAO();
                 exDao.updateVenda(venda);
-                response.sendRedirect("lista.jsp");
+                
             }
+            
+            response.sendRedirect("lista.jsp");
+            
         } catch (SQLException | ClassNotFoundException erro) {
 
             try (PrintWriter out = response.getWriter()) {
